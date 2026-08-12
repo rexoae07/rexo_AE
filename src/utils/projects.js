@@ -26,6 +26,15 @@ const projects = [
     url: 'https://www.youtube.com/shorts/KNq0chZ24bk',
     size: 'medium',
   },
+  {
+    id: 'proj-03',
+    title: 'Sexy Back Character Edit',
+    platform: 'youtube',
+    description: 'A laggy cinematic intro that snaps into smooth zooms and effects over SexyBack.',
+    thumbnail: 'https://img.youtube.com/vi/YgcZfNrGIek/hqdefault.jpg',
+    url: 'https://www.youtube.com/shorts/YgcZfNrGIek',
+    size: 'medium',
+  },
 ];
 
 export default projects;

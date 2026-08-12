@@ -2,7 +2,7 @@ import Reveal from '../components/Reveal';
 import SectionEyebrow from '../components/SectionEyebrow';
 import ProjectCard from '../components/ProjectCard';
 import MagneticButton from '../components/MagneticButton';
-import PixelBlast from '../components/PixelBlast/PixelBlast';
+import Dither from '../components/Dither/Dither';
 import projects from '../utils/projects';
 import { ArrowUpRight } from 'lucide-react';
 
@@ -14,43 +14,40 @@ export default function Showreel() {
       id="showreel"
       className="relative overflow-hidden py-24 sm:py-28 md:py-32 lg:py-36"
     >
-      {/* PixelBlast Background */}
+      {/* Dither Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <PixelBlast
-          variant="circle"
-          pixelSize={7}
-          color="#292929"
-          patternScale={3}
-          patternDensity={1.1}
-          pixelSizeJitter={0.5}
-          enableRipples
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.2}
-          liquid
-          liquidStrength={0.1}
-          liquidRadius={1.2}
-          liquidWobbleSpeed={5}
-          speed={0.5}
-          edgeFade={0.4}
-          transparent
+        <Dither
+          waveColor={[0.255, 0.255, 0.255]}
+          disableAnimation={false}
+          enableMouseInteraction={true}
+          mouseRadius={0.2}
+          colorNum={4}
+          pixelSize={2}
+          waveAmplitude={0.24}
+          waveFrequency={10}
+          waveSpeed={0.02}
         />
-
         {/* Top fade */}
-        <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-[#050505] via-[#050505]/85 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#050505] via-[#050505]/75 to-transparent z-[2]" />
 
         {/* Bottom fade */}
-        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#050505] via-[#050505]/85 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-[2]" />
 
-        {/* Side fades */}
-        <div className="absolute inset-y-0 left-0 w-36 bg-gradient-to-r from-[#050505]/60 to-transparent" />
+        {/* Left fade */}
+        <div className="absolute inset-y-0 left-0 w-64 sm:w-80 md:w-96 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-transparent z-[2]" />
+
+        {/* Right fade */}
+        <div className="absolute inset-y-0 right-0 w-64 sm:w-80 md:w-96 bg-gradient-to-l from-[#050505] via-[#050505]/90 to-transparent z-[2]" />
 
         <div className="absolute inset-y-0 right-0 w-36 bg-gradient-to-l from-[#050505]/60 to-transparent" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 px-5 sm:px-6 md:px-8 max-w-6xl mx-auto">
-        <SectionEyebrow index="03" label="Showreel" />
+        <SectionEyebrow
+          index="03"
+          label="Showreel"
+        />
 
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-10 sm:mb-14">
           <Reveal>
@@ -62,6 +59,7 @@ export default function Showreel() {
           <Reveal delay={0.1}>
             <p className="text-sm text-paper-dim max-w-xs">
               You've found me
+              <br />
               Muhehehe
             </p>
           </Reveal>
