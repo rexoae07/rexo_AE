@@ -728,7 +728,7 @@ const PixelBlast = ({
   style,
   antialias = true,
   patternScale = 1.5,
-  patternDensity = 0.25,
+  patternDensity = 0.05,
   liquid = false,
   liquidStrength = 0.1,
   liquidRadius = 1,
