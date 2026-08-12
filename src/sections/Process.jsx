@@ -18,7 +18,7 @@ export default function Process() {
       <SectionEyebrow index="04" label="Editing Process" />
       <Reveal>
         <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tightest text-white max-w-lg mb-14 sm:mb-16 lg:mb-20">
-          Six steps, one story.
+          Alright, here's how I cook.
         </h2>
       </Reveal>
 
