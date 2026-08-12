@@ -48,7 +48,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 font-mono text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-paper-dim glass rounded-full px-4 py-1.5 mb-6 sm:mb-8"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-white/70 animate-pulse shrink-0" />
-          Freelance Video Editor
+          Never stop cooking  
         </motion.div>
 
         <motion.h1

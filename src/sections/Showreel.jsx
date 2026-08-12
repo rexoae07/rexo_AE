@@ -61,8 +61,8 @@ export default function Showreel() {
 
           <Reveal delay={0.1}>
             <p className="text-sm text-paper-dim max-w-xs">
-              Projection of some of my works
-              Uploaded mainly on Instagram and YouTube
+              You've found me
+              Muhehehe
             </p>
           </Reveal>
         </div>
