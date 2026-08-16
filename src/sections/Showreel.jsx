@@ -57,10 +57,8 @@ export default function Showreel() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="text-sm text-paper-dim max-w-xs">
-              You've found me
-              <br />
-              Muhehehe
+            <p className="text-sm text-gray-300 max-w-xs">
+              No bs only edits :)
             </p>
           </Reveal>
         </div>
