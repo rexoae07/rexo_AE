@@ -1,33 +1,66 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import { ArrowRight, PlayCircle } from 'lucide-react';
-import FloatingLights from '../components/FloatingLights';
 import MagneticButton from '../components/MagneticButton';
-import DarkVeil from '../components/DarkVeil/DarkVeil';
 import GradualBlur from '../components/GradualBlur/GradualBlur';
 
 function scrollToId(id) {
   const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  if (el) {
+    el.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
 }
 
 export default function Hero() {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+
+  // Keep the parallax subtle so the typography still feels anchored
+  // to the artwork.
+  const y = useTransform(scrollYProgress, [0, 1], [0, 55]);
+  const opacity = useTransform(scrollYProgress, [0, 0.78], [1, 0]);
 
   return (
     <section
       id="top"
       ref={ref}
-      className="relative min-h-[100svh] flex items-center justify-center px-5 sm:px-6 md:px-8 overflow-hidden"
+      className="relative min-h-[100svh] flex items-center justify-center px-5 sm:px-6 md:px-8 overflow-hidden bg-black"
     >
-      <div className="absolute inset-0" aria-hidden="true">
-        <DarkVeil speed={0.3} />
-      </div>
-      <FloatingLights />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05),transparent_60%)]" />
+      {/* HERO IMAGE */}
+      <motion.div
+        initial={{
+          opacity: 0,
+          scale: 1.045,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        transition={{
+          duration: 1.4,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+        className="absolute inset-0 z-0"
+        aria-hidden="true"
+      >
+        <img
+          src="/Handa.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          style={{
+            objectPosition: 'center center',
+          }}
+        />
+      </motion.div>
+
+      {/* SUBTLE BOTTOM FADE */}
       <GradualBlur
         target="parent"
         position="bottom"
@@ -40,74 +73,243 @@ export default function Hero() {
         zIndex={1}
       />
 
-      <motion.div style={{ y, opacity }} className="relative z-10 w-full max-w-4xl mx-auto text-center pt-24">
+      {/* HERO CONTENT */}
+      <motion.div
+        style={{
+          y,
+          opacity,
+        }}
+        className="relative z-10 w-full h-[100svh]"
+      >
+        {/* TEXT */}
+        <div
+          className="
+            absolute
+            top-[30%]
+            sm:top-[30.5%]
+            md:top-[32  %]
+            left-0
+            right-0
+            w-full
+            max-w-4xl
+            mx-auto
+            text-center
+            px-6
+          "
+        >
+          <motion.h1
+            initial={{
+              opacity: 0,
+              y: 24,
+              filter: 'blur(10px)',
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              filter: 'blur(0px)',
+            }}
+            transition={{
+              duration: 1,
+              delay: 0.15,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            style={{
+              fontFamily:
+                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            }}
+            className="
+              text-[2rem]
+              sm:text-[2.55rem]
+              md:text-[3rem]
+              lg:text-[3.35rem]
+              leading-[1.08]
+              tracking-[-0.035em]
+              mb-4
+            "
+          >
+            <span className="text-white/40 font-light">
+              Cooking clips with the
+            </span>
+
+            <br />
+
+            <span className="text-white font-light">
+              help of editing
+            </span>
+          </motion.h1>
+
+          {/* DESCRIPTION */}
+          <motion.p
+            initial={{
+              opacity: 0,
+              y: 14,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.85,
+              delay: 0.4,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="
+              text-[12px]
+              sm:text-[13px]
+              md:text-[14px]
+              text-white/40
+              max-w-[430px]
+              mx-auto
+              leading-[1.55]
+            "
+            style={{
+              fontFamily:
+                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            }}
+          >
+            I cook cinematic edits, motion graphics and
+            <br className="hidden sm:block" />
+            scroll-stopping content.
+          </motion.p>
+        </div>
+
+        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-2 font-mono text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-paper-dim glass rounded-full px-4 py-1.5 mb-6 sm:mb-8"
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-white/70 animate-pulse shrink-0" />
-          Never stop cooking  
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 24, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display font-semibold text-[clamp(2.25rem,9vw,3.75rem)] sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] sm:leading-[1.03] tracking-tightest text-gradient text-balance"
-        >
-          Cooking clips
-          <br />
-          that stop the
-          <br />
-          doomscroll
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-6 sm:mt-7 text-base sm:text-lg text-paper-dim max-w-xl mx-auto leading-relaxed px-2 sm:px-0"
-        >
-        I cook cinematic edits, motion graphics, and scroll-stopping content.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-9 sm:mt-11 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-xs sm:max-w-none mx-auto"
+          initial={{
+            opacity: 0,
+            y: 18,
+            scale: 0.96,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: 1,
+          }}
+          transition={{
+            duration: 0.9,
+            delay: 0.58,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="
+            absolute
+            top-[52%]
+            sm:top-[51.5%]
+            md:top-[51%]
+            left-0
+            right-0
+            flex
+            justify-center
+          "
         >
           <MagneticButton
             onClick={() => scrollToId('showreel')}
-            className="group w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-black font-medium text-sm px-6 py-3.5 min-h-[48px] rounded-full transition-transform"
-          >
-            <PlayCircle size={17} strokeWidth={2} />
-            View Showreel
-          </MagneticButton>
+            style={{
+              fontFamily:
+                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            }}
+            className="
+              group
+              inline-flex
+              items-center
+              justify-center
 
-          <MagneticButton
-            onClick={() => scrollToId('contact')}
-            className="group w-full sm:w-auto flex items-center justify-center gap-2 glass text-white font-medium text-sm px-6 py-3.5 min-h-[48px] rounded-full"
+              bg-white
+              text-black
+              font-normal
+
+              text-[13px]
+              sm:text-[14px]
+
+              px-8
+              sm:px-9
+
+              py-3
+              sm:py-3.5
+
+              rounded-[16px]
+              sm:rounded-[17px]
+
+              transition-all
+              duration-500
+              ease-[cubic-bezier(0.16,1,0.3,1)]
+
+              hover:scale-[1.075]
+              hover:-translate-y-[3px]
+
+              hover:shadow-[0_14px_45px_rgba(255,255,255,0.22)]
+
+              active:scale-[0.98]
+              active:translate-y-0
+            "
           >
-            Contact Me
-            <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+            <span
+              className="
+                transition-transform
+                duration-500
+                ease-[cubic-bezier(0.16,1,0.3,1)]
+                group-hover:translate-x-[1px]
+              "
+            >
+              View Showreel
+            </span>
           </MagneticButton>
         </motion.div>
       </motion.div>
 
+      {/* SCROLL INDICATOR */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
-        className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-paper-faint"
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        transition={{
+          delay: 1.35,
+          duration: 1,
+        }}
+        className="
+          absolute
+          bottom-6
+          sm:bottom-9
+          left-1/2
+          -translate-x-1/2
+          flex
+          flex-col
+          items-center
+          gap-2
+          text-white/30
+          z-10
+        "
       >
-        <span className="font-mono text-[10px] tracking-[0.3em] uppercase">Scroll</span>
+        <span
+          className="
+            font-mono
+            text-[9px]
+            tracking-[0.32em]
+            uppercase
+          "
+        >
+          Scroll
+        </span>
+
         <motion.span
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-          className="h-8 w-px bg-gradient-to-b from-white/50 to-transparent"
+          animate={{
+            y: [0, 6, 0],
+            opacity: [0.45, 0.8, 0.45],
+          }}
+          transition={{
+            duration: 1.8,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className="
+            h-8
+            w-px
+            bg-gradient-to-b
+            from-white/40
+            to-transparent
+          "
         />
       </motion.div>
     </section>

@@ -10,16 +10,27 @@ export default function Home() {
   return (
     <main>
       <Hero />
+
       <div className="divider max-w-6xl mx-auto" />
+
       <About />
+
       <div className="divider max-w-6xl mx-auto" />
+
       <Achievements />
+
       <div className="divider max-w-6xl mx-auto" />
+
       <Showreel />
+
       <div className="divider max-w-6xl mx-auto" />
+
       <Process />
+
       <div className="divider max-w-6xl mx-auto" />
+
       <Contact />
+
       <Footer />
     </main>
   );

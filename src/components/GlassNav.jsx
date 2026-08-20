@@ -6,14 +6,13 @@ import { formatTimecode } from '../utils/format';
 
 const LINKS = [
   { id: 'about', label: 'About' },
-  { id: 'achievements', label: 'Stats' },
   { id: 'showreel', label: 'Work' },
-  { id: 'process', label: 'Process' },
   { id: 'contact', label: 'Contact' },
 ];
 
 function scrollToId(id) {
   const el = document.getElementById(id);
+
   if (el) {
     el.scrollIntoView({
       behavior: 'smooth',
@@ -25,24 +24,74 @@ function scrollToId(id) {
 export default function GlassNav() {
   const { activeId, progress } = useScrollSpy(LINKS.map((l) => l.id));
   const [open, setOpen] = useState(false);
+  const [navVisibility, setNavVisibility] = useState(0);
 
-  // Lock background scrolling (native + Lenis) while the mobile menu is open.
+  // Show the navbar gradually as the About section
+  // approaches the viewport.
+  useEffect(() => {
+    const handleScroll = () => {
+      const about = document.getElementById('about');
+
+      if (!about) return;
+
+      const aboutTop = about.getBoundingClientRect().top;
+      const viewportHeight = window.innerHeight;
+
+      // Navbar starts appearing when About is near
+      // the bottom of the viewport.
+      const start = viewportHeight * 0.85;
+
+      // Navbar is completely visible once About gets
+      // closer to the middle of the viewport.
+      const end = viewportHeight * 0.35;
+
+      const visibility = Math.min(
+        Math.max((start - aboutTop) / (start - end), 0),
+        1
+      );
+
+      setNavVisibility(visibility);
+
+      // Close mobile menu when returning completely
+      // to the hero/top area.
+      if (visibility === 0 && open) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, {
+      passive: true,
+    });
+
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [open]);
+
+  // Lock background scrolling while mobile menu is open.
   useEffect(() => {
     if (open) {
       const scrollY = window.scrollY;
+
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.left = '0';
       document.body.style.right = '0';
       document.body.dataset.scrollY = String(scrollY);
+
       window.__lenis?.stop();
     } else {
       const scrollY = Number(document.body.dataset.scrollY || 0);
+
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.left = '';
       document.body.style.right = '';
+
       delete document.body.dataset.scrollY;
+
       window.scrollTo(0, scrollY);
       window.__lenis?.start();
     }
@@ -52,6 +101,7 @@ export default function GlassNav() {
       document.body.style.top = '';
       document.body.style.left = '';
       document.body.style.right = '';
+
       window.__lenis?.start();
     };
   }, [open]);
@@ -63,13 +113,23 @@ export default function GlassNav() {
 
   return (
     <motion.header
-      initial={{ y: -30, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      initial={false}
+      animate={{
+        y: -120 + navVisibility * 120,
+      }}
+      transition={{
+        duration: 0.08,
+        ease: 'linear',
+      }}
+      style={{
+        pointerEvents:
+          navVisibility > 0.5 ? 'auto' : 'none',
+      }}
       className="fixed top-3 sm:top-4 inset-x-0 z-50 flex justify-center px-4 sm:px-5 md:px-6"
     >
       <div className="w-full max-w-5xl">
         <div className="glass-strong rounded-2xl px-4 sm:px-5 md:px-6 py-3 md:py-3.5 flex items-center justify-between shadow-glass">
+
           {/* Logo */}
           <a
             href="#top"
@@ -89,7 +149,9 @@ export default function GlassNav() {
               <button
                 key={link.id}
                 data-cursor="link"
-                aria-current={activeId === link.id ? 'true' : undefined}
+                aria-current={
+                  activeId === link.id ? 'true' : undefined
+                }
                 onClick={() => scrollToId(link.id)}
                 className={`relative px-3 lg:px-4 py-2 text-xs tracking-wide rounded-full transition-colors duration-300 ${
                   activeId === link.id
@@ -108,7 +170,10 @@ export default function GlassNav() {
                     }}
                   />
                 )}
-                <span className="relative">{link.label}</span>
+
+                <span className="relative">
+                  {link.label}
+                </span>
               </button>
             ))}
           </nav>
@@ -122,7 +187,9 @@ export default function GlassNav() {
             <div className="relative h-[3px] w-12 lg:w-16 rounded-full bg-white/10 overflow-hidden">
               <motion.div
                 className="absolute inset-y-0 left-0 bg-white/60"
-                style={{ width: `${progress * 100}%` }}
+                style={{
+                  width: `${progress * 100}%`,
+                }}
               />
             </div>
           </div>
@@ -132,12 +199,18 @@ export default function GlassNav() {
             data-cursor="link"
             type="button"
             className="md:hidden h-11 w-11 -mr-1 flex items-center justify-center rounded-full text-white active:bg-white/10 transition-colors"
-            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-label={
+              open ? 'Close menu' : 'Open menu'
+            }
             aria-expanded={open}
             aria-controls="mobile-nav-menu"
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X size={22} /> : <Menu size={22} />}
+            {open ? (
+              <X size={22} />
+            ) : (
+              <Menu size={22} />
+            )}
           </button>
         </div>
 
@@ -146,10 +219,25 @@ export default function GlassNav() {
           {open && (
             <motion.div
               id="mobile-nav-menu"
-              initial={{ opacity: 0, y: -8, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: 'auto' }}
-              exit={{ opacity: 0, y: -8, height: 0 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              initial={{
+                opacity: 0,
+                y: -8,
+                height: 0,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                height: 'auto',
+              }}
+              exit={{
+                opacity: 0,
+                y: -8,
+                height: 0,
+              }}
+              transition={{
+                duration: 0.3,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="md:hidden mt-2 overflow-hidden"
             >
               <nav
@@ -160,8 +248,14 @@ export default function GlassNav() {
                   <button
                     key={link.id}
                     data-cursor="link"
-                    aria-current={activeId === link.id ? 'true' : undefined}
-                    onClick={() => handleNavigate(link.id)}
+                    aria-current={
+                      activeId === link.id
+                        ? 'true'
+                        : undefined
+                    }
+                    onClick={() =>
+                      handleNavigate(link.id)
+                    }
                     className={`min-h-[48px] flex items-center text-left px-4 rounded-xl text-base transition-colors ${
                       activeId === link.id
                         ? 'text-white bg-white/10'
